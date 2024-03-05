@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Street View split-map-panes</title>
+    <style>
+        /* CSS styles */
+        html, body {
+            height: 60%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map,
+        #pano {
+            float: left;
+            height: 100%;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="pano"></div>
+
+    <script>
+        // JavaScript logic
+        function initialize() {
+            const fenway = { lat: 38.9274098, lng: -77.533363 };
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: fenway,
+                zoom: 14,
+            });
+            const panorama = new google.maps.StreetViewPanorama(
+                document.getElementById("pano"),
+                {
+                    position: fenway,
+                    pov: {
+                        heading: 34,
+                        pitch: 10,
+                    },
+                },
+            );
+
+            map.setStreetView(panorama);
+        }
+
+        window.initialize = initialize;
+    </script>
+
+    <!-- Load the Maps JavaScript API asynchronously with callback to initialize -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-9QLyaP8o2jyCF-X-soc2J5EjVdCDcLw&callback=initialize&v=weekly" defer></script>
+</body>
+</html>

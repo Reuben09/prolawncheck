@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+            /* CSS styles for the map container */
+            #map {
+            height: 400px;
+            width: 100%;
+        }
+  </style>
+      <!-- Include the Google Maps API -->
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-9QLyaP8o2jyCF-X-soc2J5EjVdCDcLw&callback=initMap" async defer></script>
+  <head>
+    
+
+
+    <link rel="manifest" href="assets/img/site.webmanifest" />
+    <!-- Revolution Slider CSS Files -->
+
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css"
+    />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css" />
+    <!-- Main Style -->
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/fontfamily.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/footer.css" />
+    <!-- Responsive Style -->
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css" />
+    <!--Icon Font-->
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="assets/fonts/font-awesome/font-awesome.min.css"
+    />
+    <!-- Extras -->
+    <link rel="stylesheet" type="text/css" href="assets/extras/animate.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="modal/css/bs4_modal.min.css" rel="stylesheet" media="all" />
+    <!-- jQuery Load -->
+    <script src="assets/js/jquery-min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- Google map's Api -->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-9QLyaP8o2jyCF-X-soc2J5EjVdCDcLw&libraries=places"></script> -->
+    <!-- Google Tag Manager -->
+
+    <!-- End Google Tag Manager -->
+    <style>
+      .Geolocation {
+        background: #ecf0f1;
+      }
+    </style>
+  </head>
+
+  <body>
+
+
+    <section class="Geolocation">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 style="color: #4a7210; font-size: 45px">
+            <strong>Is this the requested address?</strong>
+          </h2>
+
+          <!-- <a class="btn primary_bg--green btn-lg text-white" role="button" href="plans.html">Book Now</a> -->
+          <p id="demo" class="mt-5"><strong></strong></p>
+        </div>
+      </div>
+    </section>
+    <!-- included footer file -->
+
+
+ <!-- Display the map here -->
+ <div id="map">
+
+  <script>
+      // JavaScript logic
+      let map;
+      let marker;
+      let geocoder;
+      let responseDiv;
+      let response;
+
+      function initMap() {
+          map = new google.maps.Map(document.getElementById("map"), {
+              zoom: 15,
+              center: { lat: 37.03, lng: -76.35 },
+              mapTypeControl: false,
+              mapTypeId: 'hybrid',
+          });
+          geocoder = new google.maps.Geocoder();
+
+          const inputText = document.createElement("input");
+
+          inputText.type = "text";
+          inputText.placeholder = "Enter a location";
+
+          const submitButton = document.createElement("input");
+
+          submitButton.type = "button";
+          submitButton.value = "Geocode";
+          submitButton.classList.add("button", "button-primary");
+
+          const clearButton = document.createElement("input");
+
+          clearButton.type = "button";
+          clearButton.value = "Clear";
+          clearButton.classList.add("button", "button-secondary");
+          response = document.createElement("pre");
+          response.id = "response";
+          response.innerText = "";
+          responseDiv = document.createElement("div");
+          responseDiv.id = "response-container";
+          responseDiv.appendChild(response);
+
+          const instructionsElement = document.createElement("p");
+
+          instructionsElement.id = "instructions";
+          instructionsElement.innerHTML =
+              "<strong>Instructions</strong>: Enter an address in the textbox to geocode or click on the map to reverse geocode.";
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputText);
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton);
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(clearButton);
+          map.controls[google.maps.ControlPosition.LEFT_TOP].push(instructionsElement);
+          map.controls[google.maps.ControlPosition.LEFT_TOP].push(responseDiv);
+          marker = new google.maps.Marker({
+              map,
+          });
+          map.addListener("click", (e) => {
+              geocode({ location: e.latLng });
+          });
+          submitButton.addEventListener("click", () =>
+              geocode({ address: inputText.value }),
+          );
+          clearButton.addEventListener("click", () => {
+              clear();
+          });
+          clear();
+      }
+
+      function clear() {
+          marker.setMap(null);
+          responseDiv.style.display = "none";
+      }
+
+      function geocode(request) {
+          clear();
+          geocoder
+              .geocode(request)
+              .then((result) => {
+                  const { results } = result;
+
+                  map.setCenter(results[0].geometry.location);
+                  marker.setPosition(results[0].geometry.location);
+                  marker.setMap(map);
+                  responseDiv.style.display = "block";
+                  response.innerText = JSON.stringify(result, null, 2);
+                  return results;
+              })
+              .catch((e) => {
+                  alert("Geocode was not successful for the following reason: " + e);
+              });
+      }
+  </script>
+
+
+
+
+    <div id="footer-container"></div>
+    <!-- included footer files-->
+    <!--model end-->
+    <!-- Bootstrap JS -->
+    <script src="assets/js/bootstrap.js"></script>
+    <!-- WOW JS plugin for animation -->
+    <script src="assets/js/wow.js"></script>
+    <!-- All JS plugin Triggers -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="assets/js/includeHeader_Footer.js"></script>
+
+    <script src="assets/js/modal.js" type="text/javascript"></script>
+
+ 
+
+    <!-- geolocation code start -->
+    <script>
+      const x = document.getElementById("demo");
+
+      
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+          x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+      
+
+      function showPosition(position) {
+        x.innerHTML =
+          " <h4>Address: " +
+          "<h4>";
+                        // Initialize the map with the user's location
+                        initMap(position.coords.latitude, position.coords.longitude);
+      }
+      
+        // Initialize the map function
+        function initMap(latitude, longitude) {
+            // Create a map centered at the user's location
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 15,
+                center: { lat: latitude, lng: longitude },
+                mapTypeControl: false,
+                mapTypeId: 'hybrid',
+            });
+
+            // Create a marker at the user's location
+            new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+            });
+        }
+    </script>
+    <!-- geolocation code end -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Find the button
+        // var bookNowButton = document.querySelector('.modal-content button[data-target="#ModalScrollable"]');
+
+        // // Find the mainContainer
+        // var mainContainer = document.getElementById('modelTemplate');
+
+        // // Add click event listener to the button
+        // bookNowButton.addEventListener('click', function () {
+        //   // Hide the mainContainer
+        //   mainContainer.style.display = 'none';
+        // });
+
+        document.addEventListener("DOMContentLoaded", function () {
+          // Find all elements with the specified selector (returns a NodeList)
+          var bookNowButtons = document.querySelectorAll(
+            '.modal-content [data-target="#ModalScrollable"]'
+          );
+
+          console.log(bookNowButtons);
+
+          // Find the mainContainer
+          var mainContainer = document.getElementById("modelTemplate");
+
+          // Add click event listener to each button in the NodeList
+          bookNowButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+              // Hide the mainContainer
+              mainContainer.style.display = "none";
+            });
+          });
+        });
+      });
+    </script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const address = urlParams.get('address');
+      const addressElement = document.createElement('p');
+      addressElement.innerHTML = `<strong>Requested Address:</strong> ${address}`;
+      document.getElementById('demo').appendChild(addressElement);
+  });
+</script>
+
+
+<script>
+  // Function to parse URL parameters
+  function getUrlParameter(name) {
+      name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  };
+
+  // Function to open map on the provided address
+  function openMapOnAddress(address) {
+      // Constructing the Google Maps URL with the address
+      var mapsUrl = "https://www.google.com/maps/embed/v1/place?q=" + encodeURIComponent(address) + "&key=AIzaSyA-9QLyaP8o2jyCF-X-soc2J5EjVdCDcLw&callback=initMap";
+
+      // Setting the iframe source to the constructed Google Maps URL
+      document.getElementById('mapFrame').src = mapsUrl;
+      console.log(openMapOnAddress)
+  }
+
+  // On page load, check for address parameter in URL and open map if provided
+  document.addEventListener('DOMContentLoaded', function() {
+      var addressParam = getUrlParameter('address');
+      if (addressParam !== '') {
+          openMapOnAddress(addressParam);
+      }
+  });
+</script>
+
+  </body>
+</html>
