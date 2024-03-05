@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Map</title>
+  <style>
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+   
+  input, select{
+     margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <form id="routeForm" action="">
+    <label for="start_lat">Starting Point:</label><br>
+    <input type="text" id="start_addr" name="start_addr" value="Adelaide,SA" required><br>
+  
+    <label for="end_lat">End Point:</label><br>
+    <input type="text" id="end_addr" name="end_addr" value="Adelaide,SA" required><br>
+  
+    <label for="s1_lat">Stop Point 1:</label><br>
+    <input type="text" id="s1_addr" name="s1_addr" value="Barossa+Valley,SA" required><br>
+  
+    <label for="s2_lat">Stop Point 2:</label><br>
+    <input type="text" id="s2_addr" name="s2_addr" value="Clare,SA" required><br>
+  
+    <label for="s3_lat">Stop Point 3:</label><br>
+    <input type="text" id="s3_addr" name="s3_addr" value="Connawarra,SA" required><br>
+
+    <label for="cars">Pick a travel mode:</label><br>
+
+      <select name="travelMode" id="travelMode" required>
+      <option value="DRIVE">DRIVE</option>
+      <option value="BICYCLE">BICYCLE</option>
+      <option value="WALK">WALK</option>
+      <option value="TWO_WHEELER">TWO_WHEELER</option>
+     </select> <br>
+
+     <label for="s3_lat">Choose a depature time:</label><br>
+     <input type="datetime-local" id="dept_datetime" name="dept_datetime" value=""><br>
+  
+    <input type="submit" value="Submit">
+  </form> 
+  
+  <table id="routesTable" style="display: none; width: full;">
+    <thead>
+      <tr>
+        <th>Leg</th>
+        <th>Distance (m)</th>
+        <th>Duration</th>
+        <th>Optimized Waypoint Index</th>
+      </tr>
+    </thead>
+    <tbody >
+      <!-- Table body will be populated dynamically -->
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Total</th>
+        <th id="totalDistance"></th>
+        <th id="totalDuration"></th>
+        <th></th>
+      </tr>
+    </tfoot>
+  </table>
+  
+
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAazqreSmRAw3skYhVIjJYZO9kW8WCV7Ms&callback=initMap" async defer></script> -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAazqreSmRAw3skYhVIjJYZO9kW8WCV7Ms&libraries=geometry&callback=initMap" async defer></script> -->
+
+  <script src="index.js">
+  </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        /* CSS styles for the map container */
+
+        .Geolocation {
+            background: #ecf0f1;
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+    <!-- Include the Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-9QLyaP8o2jyCF-X-soc2J5EjVdCDcLw&callback=initMap"
+        async defer></script>
+</head>
+
+<body>
+
+    <section class="Geolocation">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 style="color: #4a7210; font-size: 45px">
+                    <strong>Is this the requested address?</strong>
+                </h2>
+
+                <!-- <a class="btn primary_bg--green btn-lg text-white" role="button" href="plans.html">Book Now</a> -->
+                <p id="demo" class="mt-5"><strong></strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Display the map here -->
+    <div id="map"></div>
+
+    <script>
+        // JavaScript logic
+        let map;
+        let geocoder;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 15,
+                center: { lat: 0, lng: 0 }, // Default center
+                mapTypeControl: false,
+                mapTypeId: 'hybrid',
+            });
+            geocoder = new google.maps.Geocoder();
+
+            // Get address parameter from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const address = urlParams.get('address');
+
+            if (address) {
+                geocodeAddress(address);
+            }
+        }
+
+        function geocodeAddress(address) {
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    map.setCenter(results[0].geometry.location);
+                    new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

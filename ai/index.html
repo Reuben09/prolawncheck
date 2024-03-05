@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script> <!-- Add reCAPTCHA script -->
+    <script type="text/javascript" src="chatgpt.js"></script>
+</head>
+
+<body>
+
+    <h2>ChatGPT Messages</h2>
+    <form action="javascript:void(0)">
+        <div class="input-container">
+            <i class="fa fa-user icon"></i>
+            <input id="chatMessage" class="input-field" type="text" placeholder="Enter message..." name="usrnm">
+        </div>
+        <!-- Add reCAPTCHA widget -->
+        <div class="g-recaptcha" data-sitekey="6LdhTXYpAAAAAMIWVMUUGsgt7aD0uhkxzCOYgizy"
+            data-callback="recaptchaCallback"></div>
+
+        <button type="submit" id="sendBtn" class="btn">Send</button>
+    </form>
+    <div id="loadingContainer" class="container darker d-none">
+        <p>AI is thinking...</p>
+    </div>
+    <div id="chatOutput"></div>
+
+</body>
+
+<script>
+    var recaptchaResponse = ''; // Store reCAPTCHA response
+
+    // Callback function executed after user successfully completes the reCAPTCHA challenge
+    function recaptchaCallback(response) {
+        recaptchaResponse = response; // Store reCAPTCHA response
+        // console.log("reCAPTCHA response:", recaptchaResponse); // Log the reCAPTCHA response to the console
+    }
+
+
+    window.onload = function () {
+        const CHATGPT_API_KEY = "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";
+        const CHATGPT_API_URL = "https://api.openai.com/v1/chat/completions";
+        var sendBtnElem = document.getElementById("sendBtn");
+        var chatMessageElem = document.getElementById("chatMessage");
+        var chatOutputElem = document.getElementById("chatOutput");
+        var loadingContainerElem = document.getElementById("loadingContainer");
+        var recaptchaWidget = document.querySelector('.g-recaptcha'); // Select the reCAPTCHA widget
+
+        sendBtnElem.addEventListener("click", function () {
+            if (recaptchaResponse.length === 0) {
+                alert("Please complete the reCAPTCHA.");
+                return;
+            }
+
+            var message = chatMessageElem.value;
+            if (message != null && message != "") {
+                generateUserChatBubble(message);
+                loadingContainerElem.classList.remove("d-none");
+                sendChatGPTMessage(message, generateAIChatBubble);
+                chatMessageElem.value = "";
+                recaptchaWidget.style.display = 'none'; // Hide reCAPTCHA widget after successful verification
+            } else {
+                alert("Please enter a message.");
+            }
+        });
+
+
+
+        // Rest of your code remains unchanged
+        function generateUserChatBubble(message) {
+            // Create a new chat bubble wrapper.
+            var chatBubbleElem = document.createElement("div");
+            chatBubbleElem.classList.add("container");
+            chatBubbleElem.classList.add("user-container");
+            // Create the message container.
+            var chatMessageElem = document.createElement("p");
+            chatMessageElem.innerHTML = message;
+            chatBubbleElem.appendChild(chatMessageElem);
+            chatOutputElem.prepend(chatBubbleElem);
+        }
+        function generateAIChatBubble(message) {
+            // Create a new chat bubble wrapper.
+            var chatBubbleElem = document.createElement("div");
+            chatBubbleElem.classList.add("container");
+            chatBubbleElem.classList.add("darker");
+            // Create the message container.
+            var chatMessageElem = document.createElement("p");
+            chatMessageElem.innerHTML = message;
+            chatBubbleElem.appendChild(chatMessageElem);
+            chatOutputElem.prepend(chatBubbleElem);
+            loadingContainerElem.classList.add("d-none");
+        }
+        function sendChatGPTMessage(message, onSuccessCallback) {
+            var messageBody = {
+                "model": "gpt-3.5-turbo",
+                "messages": [{
+                    "role": "user",
+                    "content": message.trim()
+                }]
+            };
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                // Parse the response body into JSON object.
+                var responseBodyObj = JSON.parse(this.responseText);
+                // I'm cheating a little as I know which property I need. I recommend making this more robust.
+                // If you want to see the response object itself then log it to the console and learn!
+                onSuccessCallback(responseBodyObj.choices[0].message.content);
+            }
+            xhttp.open("POST", CHATGPT_API_URL, true);
+            // Some simple headers are required for this to work properly with their API.
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.setRequestHeader("Authorization", "Bearer " + CHATGPT_API_KEY);
+            xhttp.send(JSON.stringify(messageBody));
+        }
+    };
+    
+</script>
+
+</html>

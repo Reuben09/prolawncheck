@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Simple Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+
+    <style>
+        #map{
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+   <script>
+    function initMap(){
+        var options = {
+            zoom:13,
+            center:{lat:37.040753, lng:-76.29769}
+        }
+
+        // new map
+
+        var map = new 
+        google.maps.Map(document.getElementById('map'), options);
+
+        // add marker
+        addMarker({lat:37.048459, lng:-76.2998775});
+        addMarker({lat:37.040019, lng:-76.3187965});
+        addMarker({lat:36.9864, lng:-76.4165});
+
+        function addMarker(coords){
+          var marker = new google.maps.Marker({
+            position: coords,
+            map:map
+        })
+        }
+    }
+   </script>
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAazqreSmRAw3skYhVIjJYZO9kW8WCV7Ms&callback=initMap"></script>
+  </body>
+</html>

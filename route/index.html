@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Map</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    form {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    select {
+      width: calc(100% - 20px);
+      margin: 0.5rem 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    #plus {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+    }
+    .sheet-container{
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <p style="text-align: center;"><span id="total-stopPoints"></span> Total Stop points</p>
+  <div class="sheet-container">
+    <a style="text-align: center;"target="_blank" href="https://docs.google.com/spreadsheets/d/1fbkyxy82SE3VsAYkHYjKuWzCOKadYe7DcCMu1s5Fo-I/edit#gid=0">
+      Link to google sheet
+    </a>
+  </div>
+  <form id="routeForm" action="">
+    <label for="start_addr">Starting Point:</label><br>
+    <input type="text" id="start_addr" name="start_addr" required><br>
+
+    <label for="end_addr">End Point:</label><br>
+    <input type="text" id="end_addr" name="end_addr" required><br>
+
+    <div id="stopPoints">
+    </div>
+
+    <label for="travelMode">Pick a travel mode:</label><br>
+    <select name="travelMode" id="travelMode" required>
+      <option value="DRIVE">DRIVE</option>
+    </select> <br>
+
+    <label for="dept_datetime">Choose a departure time:</label><br>
+    <input type="datetime-local" id="dept_datetime" name="dept_datetime" value="" required><br>
+
+    <input type="submit" value="Submit">
+  </form>
+
+  <table id="routesTable" style="display: none; flex-direction: column; justify-content: center;">
+    <thead>
+      <tr>
+        <th>Leg</th>
+        <th>Address</th>
+        <th>Distance (m)</th>
+        <th>Duration</th>
+        <th>Optimized Waypoint Index</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Table body will be populated dynamically -->
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Total</th>
+        <th id="totalDistance"></th>
+        <th id="totalDuration"></th>
+        <th></th>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div id="plus">+</div>
+
+  <script src="index.js"></script>
+</body>
+</html>
